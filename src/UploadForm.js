@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import { apiUrl } from './api';
 import { generateRandomSchedule } from './scheduleUtils';
 
 const MAX_FILES = 80;
@@ -96,7 +97,7 @@ export default function UploadForm({ onUpload }) {
     captions.forEach(c => form.append('captions', c));
     times.forEach(t => form.append('scheduledTimes', t));
     try {
-      const res = await axios.post('/api/reels/upload', form, {
+      const res = await axios.post(apiUrl('/reels/upload'), form, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       onUpload(res.data.reels);

@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { apiUrl } from './api';
 
 export default function ReelsTable({ refresh }) {
   const [reels, setReels] = useState([]);
@@ -8,7 +9,7 @@ export default function ReelsTable({ refresh }) {
 
   useEffect(() => {
     setLoading(true);
-    axios.get('/api/reels').then(res => {
+    axios.get(apiUrl('/reels')).then(res => {
       setReels(res.data.reels);
       setLoading(false);
     });
@@ -17,7 +18,7 @@ export default function ReelsTable({ refresh }) {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this scheduled reel?')) return;
     try {
-      await axios.delete(`/api/reels/${id}`);
+      await axios.delete(apiUrl(`/reels/${id}`));
       setReels(reels => reels.filter(r => r._id !== id));
     } catch (err) {
       alert(err.response?.data?.error || 'Delete failed');
@@ -27,7 +28,7 @@ export default function ReelsTable({ refresh }) {
   const handleDeleteAll = async () => {
     if (!window.confirm('Delete ALL scheduled reels?')) return;
     try {
-      await axios.delete('/api/reels/pending/all');
+      await axios.delete(apiUrl('/reels/pending/all'));
       setReels(reels => reels.filter(r => r.status !== 'Pending'));
     } catch (err) {
       alert(err.response?.data?.error || 'Delete all failed');
